@@ -1,8 +1,8 @@
 {
-  "name": "boilerplate",
+  "name": "Hangman",
   "version": "1.0.0",
   "main": "index.js",
-  "author": "Andrew Mead",
+  "author": "Nima Movasseghi",
   "license": "MIT",
   "scripts": {
     "server": "live-server public/",

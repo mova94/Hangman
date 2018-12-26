@@ -13,6 +13,11 @@ class Display extends React.Component{
                 }
                 
                 <br/>
+                {/* error message if there is no input */}
+                {
+                    this.props.error && <h1> <strong>{this.props.error}</strong> </h1>
+                }
+                
 
                 <div>
                     {this.props.letters.join("-")}
