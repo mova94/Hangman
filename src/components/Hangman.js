@@ -1,21 +1,19 @@
 import React from 'react';
-import Display from "./Display"
+import Display from "./Display";
+import Form from "./Form";
 
 class Hangman extends React.Component{
 
     state = {
         tries:5,
         words:[ "monkey", "bird", "gorilla", "zebra", "lion"],
-        word: "",
+        word: '',
         letters: ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'],
         encrypted: [],
         error:"",
-        guessed: false
+        start:false
     };
     
-    //Use this lifecycle method to temporarily fix a bug that didn't have the selectWord function return a word. 
-    //The bug fix is so that the function will be called on mount so that it bypasses the bug so that when the button is pressed
-    //an encryption of the word will come out.
     componentDidMount(){
         this.selectWord();
     }
@@ -26,55 +24,55 @@ class Hangman extends React.Component{
  
     selectWord = () => {
         const randNum = Math.floor(Math.random() * this.state.words.length);
-        const newWord = this.state.words[randNum];
-        this.setState( () => ({
-            word: newWord,
-            encrypted: [],
-            guessed: false
-        }), console.log(this.state.encrypted));
-        this.handleEncryption(this.state.word)
-    };
+        const selected = this.state.words[randNum];
+        console.log(selected);
+        this.setState(() => ({
+            word: selected,
+            encrypted:[]
+        }), console.log("state changed"));
+    }
 
-    handleEncryption = (letter, placement) =>{
+    handleEncryption = () =>{
         const count = this.state.word.length;
         const encrypted = this.state.encrypted;
 
-            if(this.state.guessed === false){
                 for (let index = 0; index < count; index++) {
                     encrypted.push('*')
                 }
                 
                 this.setState(() => ({
-                    encrypted: encrypted
-                }));
-            }
-            
-            
-            if(letter){
-                encrypted[placement] = letter;
+                    encrypted,
+                    start:true
+                }));   
+    }
 
-                this.setState(() => ({
-                    encrypted: encrypted
-                }));
-            }
-        
-      
+    handleDecipher = (letter, index) => {
+        const decipher = this.state.encrypted;
+
+        decipher[index] = letter;
+
+        this.setState(() => ({
+            encrypted:decipher
+        }))
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
         const user_input = e.target.elements.user_input.value;
-
-        if(!user_input){
+        e.target.elements.user_input.value = null;
+        if(!user_input || !user_input.match(/^[A-Za-z]+$/)){
             this.setState(() => ({
                 error: "Please enter a valid character"
             }));
         }
         else if(this.state.word.indexOf(user_input) > -1){
-            const index = this.state.word.indexOf(user_input);
-            const letter = user_input;
 
-            this.handleEncryption(letter, index);
+            for (let index = 0; index < this.state.word.length; index++) {
+                if(user_input === this.state.word[index]){
+                    this.handleDecipher(user_input, index);
+                }
+            }
+        
 
             this.setState(() => ({
                 error:""
@@ -82,14 +80,22 @@ class Hangman extends React.Component{
         }
         else{
             console.log(this.state.word.indexOf(user_input));
-            this.setState(() => ({
-                error:""
-            }));
+            for (let index = 0; index < this.state.letters.length; index++) {
+                if(user_input === this.state.letters[index]){
+                    this.setState((prevState) => ({
+                        error:"",
+                        tries: prevState.tries - 1,
+                        // letters: prevState.letters.pop()
+                    }));
+                }
+                
+            }
+            
             console.log("remove from guess list and decrease amount of tries");
         }
     }
    
-
+//disable button after user presses begin!
     render(){
         return(
             <div>
@@ -102,17 +108,17 @@ class Hangman extends React.Component{
                     letters = {this.state.letters}
                     encrypted = {this.state.encrypted}
                     error = {this.state.error}
+                    tries = {this.state.tries}
                     />
             
                     <br/>
-                    <form onSubmit={this.handleSubmit}>
-                        <input type="text" placeholder="i.e. 'f'" maxLength="1" name="user_input"></input>
-                        <button type="submit"> Guess </button>
-                    </form>
+                    <Form
+                    handleSubmit = {this.handleSubmit}
+                    visible = {this.state.start}
+                    />
                     
-                    
-                    <button onClick={this.selectWord}>Set New Word</button>
-                    <button onClick={this.gameReset}>Reset</button>
+                    <button onClick={this.handleEncryption} disabled={this.state.start}>Begin</button>
+                    <button onClick={this.gameReset} disabled={!this.state.start}>Set New Word</button>
 
             </div>
         )

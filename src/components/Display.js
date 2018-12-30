@@ -22,6 +22,9 @@ class Display extends React.Component{
                 <div>
                     {this.props.letters.join("-")}
                 </div>
+                <div>
+                    <h4>Tries:{this.props.tries}</h4>
+                </div>
 
             </div>
             
