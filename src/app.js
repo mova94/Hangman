@@ -4,6 +4,5 @@ import ReactDOM from 'react-dom';
 import 'normalize.css/normalize.css';
 import './styles/styles.scss';
 import Hangman from './components/Hangman';
-import Test from './components/Test';
 
 ReactDOM.render(<Hangman/>, document.getElementById('app'));

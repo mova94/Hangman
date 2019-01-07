@@ -11,7 +11,12 @@ class Hangman extends React.Component{
         letters: ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'],
         encrypted: [],
         error:"",
-        start:false
+        start:false,
+        win:false,
+        lose:false,
+        loseMessage:"Oh No! You have run out of tries :( R.I.P",
+        winMessage: "HURRAY! YOU SAVED ME FROM MY DOOM!!!!!!",
+        disableGuess: false
     };
     
     componentDidMount(){
@@ -25,11 +30,10 @@ class Hangman extends React.Component{
     selectWord = () => {
         const randNum = Math.floor(Math.random() * this.state.words.length);
         const selected = this.state.words[randNum];
-        console.log(selected);
         this.setState(() => ({
             word: selected,
             encrypted:[]
-        }), console.log("state changed"));
+        }));
     }
 
     handleEncryption = () =>{
@@ -54,6 +58,12 @@ class Hangman extends React.Component{
         this.setState(() => ({
             encrypted:decipher
         }))
+
+        if(this.state.encrypted.indexOf("*") === -1){
+            this.setState(() => ({
+                win: true
+            }));
+        }
     }
 
     handleSubmit = (e) => {
@@ -79,46 +89,61 @@ class Hangman extends React.Component{
             }))
         }
         else{
-            console.log(this.state.word.indexOf(user_input));
             for (let index = 0; index < this.state.letters.length; index++) {
-                if(user_input === this.state.letters[index]){
+                if(user_input === this.state.letters[index] && this.state.tries > 0){
+                    this.checkTries();
                     this.setState((prevState) => ({
                         error:"",
                         tries: prevState.tries - 1,
-                        // letters: prevState.letters.pop()
                     }));
                 }
                 
             }
-            
-            console.log("remove from guess list and decrease amount of tries");
         }
     }
    
-//disable button after user presses begin!
+    checkTries = () =>{
+        if(this.state.tries === 1){
+            this.setState(()=>({
+                lose:true
+            }))
+        }
+    } 
+
     render(){
         return(
             <div>
-                    <div className="title_">
-                        Hangman                    
+                    <div className="header">
+                        <h3 className="header__title">Hangman</h3>                    
                     </div>
-
-                    <Display
+            <div className="container">
+                 <Display
                     word = {this.state.word}
                     letters = {this.state.letters}
                     encrypted = {this.state.encrypted}
                     error = {this.state.error}
                     tries = {this.state.tries}
+                    lose = {this.state.lose}
+                    win = {this.state.win}
+                    loseMessage = {this.state.loseMessage}
+                    winMessage = {this.state.winMessage}
                     />
             
                     <br/>
                     <Form
                     handleSubmit = {this.handleSubmit}
                     visible = {this.state.start}
+                    lose = {this.state.lose}
+                    win = {this.state.win}
                     />
                     
-                    <button onClick={this.handleEncryption} disabled={this.state.start}>Begin</button>
-                    <button onClick={this.gameReset} disabled={!this.state.start}>Set New Word</button>
+                    <div className="divider">
+                        <button className="begin-button" onClick={this.handleEncryption} disabled={this.state.start}>Begin</button>
+                        <button className="startOver-button" onClick={this.gameReset} disabled={!this.state.start}>Start Over</button>
+                    </div>
+                    
+            </div>
+
 
             </div>
         )

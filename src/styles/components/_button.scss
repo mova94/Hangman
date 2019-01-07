@@ -1,0 +1,35 @@
+.button{
+    background-color: #00ffff;
+    border:none;
+    border-bottom: .3rem solid darken(#00ffff, 10%);
+    color: white;
+    font-weight: 500;
+    padding: $s-size;
+}
+
+.button:disabled{
+    opacity: .5;
+}
+
+.begin-button{
+    background-color: rgb(65, 116, 150);
+    border:none;
+    border-bottom: .3rem solid darken( rgb(65, 116, 150), 10%);
+    color: white;
+    font-weight: 500;
+    padding: $s-size;
+}
+
+.begin-button:disabled{
+    opacity: .5;
+}
+
+.startOver-button {
+    background-color: rgb(116, 65, 150);
+    border:none;
+    border-bottom: .3rem solid darken( rgb(65, 116, 150), 10%);
+    color: white;
+    font-weight: 500;
+    padding: $s-size;
+    padding-left: 5;
+}

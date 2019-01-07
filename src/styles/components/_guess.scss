@@ -1,0 +1,14 @@
+.user-input{
+    flex-grow: 1;
+    background: rgb(134, 197, 216);
+    border:none;
+    border-bottom: .3rem solid darken(rgb(134, 197, 216), 10%);
+    margin:0 0 $s-size 0;
+    color: white;
+    padding: $s-size;
+}
+
+input::placeholder{
+    color: rgb(142, 66, 204);
+    font-size: 2rem
+}

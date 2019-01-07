@@ -6,8 +6,8 @@ const Form = (props) => {
             {
                 props.visible && 
                 <form onSubmit={props.handleSubmit} >
-                    <input type="text" placeholder="i.e. f" maxLength="1" name="user_input" ></input>
-                    <button type="submit"> Guess </button>
+                    <input className="user-input" type="text" placeholder="i.e. f" maxLength="1" name="user_input" ></input>
+                    <button className="button" type="submit" disabled = {props.lose || props.win}> Guess </button>
                 </form>
             }
             
